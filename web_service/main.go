@@ -16,6 +16,9 @@ func main() {
 }
 
 func postContact(c *gin.Context) {
+
+	c.Header("Access-Control-Allow-Origin", "*")
+
 	var newContact models.Contact
 
 	if err := c.BindJSON(&newContact); err != nil {

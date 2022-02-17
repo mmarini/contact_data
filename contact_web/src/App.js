@@ -22,10 +22,6 @@ export default class ContactForm extends React.Component {
     this.setState({ email: evt.target.value });
   };
 
-  setMessage = evt => {
-    this.setState({ message: evt.target.value })
-  }
-
   handlePhoneNumberChange = idx => evt => {
     const newPhoneNumbers = this.state.phone_numbers.map((phone_number, sidx) => {
       if (idx !== sidx) return phone_number;
@@ -54,10 +50,13 @@ export default class ContactForm extends React.Component {
         }),
       });
       let resJson = await res.json();
-      if (res.status === 200) {
-        this.setMessage("Contact created successfully");
+      if (res.status === 201) {
+        this.setState({ full_name: "" });
+        this.setState({ email: "" });
+        this.setState({ phone_numbers: [{ number: "" }] });
+        this.setState({ message: "Contact created successfully" })
       } else {
-        this.setMessage("Some error occured");
+        this.setState({ message: "An error occured" })
       }
     } catch (err) {
       console.log(err);

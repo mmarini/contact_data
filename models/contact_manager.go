@@ -5,10 +5,13 @@ import (
 )
 
 func SaveContact(contact Contact) int {
-	sql := `INSERT into "contacts"("full_name", "email") VALUES($1, $2) RETURNING id`
-	contactId := persistance.Insert(sql, contact.FullName, contact.Email)
 
-	for _, phoneNumber := range contact.PhoneNumbers {
+	saveableContact := contact.Format()
+
+	sql := `INSERT into "contacts"("full_name", "email") VALUES($1, $2) RETURNING id`
+	contactId := persistance.Insert(sql, saveableContact.FullName, saveableContact.Email)
+
+	for _, phoneNumber := range saveableContact.PhoneNumbers {
 		SavePhoneNumber(contactId, phoneNumber)
 	}
 

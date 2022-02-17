@@ -1,8 +1,7 @@
 package models
 
 type Contact struct {
-	// Rate Data
-	FullName     string
-	Email        string
-	PhoneNumbers []PhoneNumber
+	FullName     string        `json:"full_name"`
+	Email        string        `json:"email"`
+	PhoneNumbers []PhoneNumber `json:"phone_numbers"`
 }

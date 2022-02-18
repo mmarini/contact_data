@@ -101,6 +101,8 @@ The models are broken up in the following way:
 
 With the model_manager.go functions, I think I need to look at how namespacing work in go lang. I'd much rather have a convention of `contact_manager.Save(contact)` rather than `SaveContact(contact)` which I currently have.
 
+There is also no transaction at a persistence level here, so there's no rollback if say an insert into the phone numbers table doesn't work.
+
 ## Web_Service
 
 The webservice module uses the gin library for setting up a web server. There is only one end point, POST /contacts for saving contact data. This file is pretty thin, which is by design as it leverages the patterns for the above to keep it that way.

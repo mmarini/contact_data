@@ -3,6 +3,7 @@ package persistance
 import (
 	"database/sql"
 	"fmt"
+	"strings"
 
 	_ "github.com/lib/pq"
 )
@@ -15,7 +16,7 @@ const (
 	dbname   = "contacts"
 )
 
-func Insert(statement string, args ...interface{}) int {
+func Insert(tableName string, columns []string, args ...interface{}) int {
 
 	db, err := sql.Open("postgres", connectionString())
 	CheckError(err)
@@ -23,10 +24,25 @@ func Insert(statement string, args ...interface{}) int {
 	defer db.Close()
 
 	var id int
+	statement := prepareInsertStatement(tableName, columns)
+
 	err = db.QueryRow(statement, args...).Scan(&id)
 	CheckError(err)
 
 	return id
+}
+
+func prepareInsertStatement(tableName string, columns []string) string {
+	statement := fmt.Sprintf(`INSERT INTO "%s"("%s") VALUES (`, tableName, strings.Join(columns[:], "\",\""))
+
+	var positions []string
+	for pos := range columns {
+		positions = append(positions, fmt.Sprintf("$%d", pos+1))
+	}
+
+	statement = statement + strings.Join(positions, ",") + ") RETURNING id"
+
+	return statement
 }
 
 func connectionString() string {

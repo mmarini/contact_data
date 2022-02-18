@@ -5,8 +5,11 @@ import (
 )
 
 func SavePhoneNumber(contactId int, phoneNumber PhoneNumber) int {
-	sql := `INSERT into "phone_numbers"("contact_id", "phone_number") VALUES($1, $2) RETURNING id`
-	savedId := persistance.Insert(sql, contactId, phoneNumber)
+
+	var columns = []string{"contact_id", "phone_number"}
+	var tableName = string("phone_numbers")
+
+	savedId := persistance.Insert(tableName, columns, contactId, phoneNumber)
 
 	return savedId
 }
